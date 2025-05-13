@@ -10,15 +10,16 @@ class AuthService {
     AuthService.instance = this;
   }
 
-  async register({ name, email, password, subscription, role }) {
-    const existing = await User.findOne({ email });
-    if (existing) throw new Error('User already exists');
+ async register({ name, email, password, role }) {
+  const existing = await User.findOne({ email });
+  if (existing) throw new Error('User already exists');
 
-    const hashed = await bcrypt.hash(password, 10);
-    const user = new User({ name, email, password: hashed, subscription, role });
-    await user.save();
-    return user;
-  }
+  const hashed = await bcrypt.hash(password, 10);
+  const user = new User({ name, email, password: hashed, role }); // no subscription here
+  await user.save();
+  return user;
+}
+
 
   async login({ email, password }) {
     const user = await User.findOne({ email });

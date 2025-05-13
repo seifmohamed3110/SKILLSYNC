@@ -22,14 +22,12 @@ exports.login = async (req, res) => {
 };
 
 exports.register = async (req, res) => {
-  const { name, email, password, subscription, role } = req.body;
-
+  const { name, email, password, role } = req.body;
   try {
-    // Call Singleton Service register()
-    const user = await authService.register({ name, email, password, subscription, role });
-    
+    const user = await authService.register({ name, email, password, role });
     res.status(201).json({ message: 'User registered successfully', user });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
+
