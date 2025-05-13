@@ -18,11 +18,16 @@ const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const resumeRoutes = require('./routes/resumeRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const assessmentRoutes = require('./routes/assessmentRoutes');
+const careerRoutes = require('./routes/careerRoutes');
+
 
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/resume', resumeRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/assessment', assessmentRoutes);
+app.use('/api/career', careerRoutes);
 
 
 // Connect to MongoDB
