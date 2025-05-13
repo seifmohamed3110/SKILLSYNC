@@ -32,3 +32,36 @@ exports.suggestCareers = async (req, res) => {
     res.status(500).json({ message: 'Error suggesting careers', error: error.message });
   }
 };
+
+const User = require('../models/User');
+const roadmaps = require('../data/roadmaps');
+
+exports.selectCareer = async (req, res) => {
+  try {
+    const { career } = req.body;
+    const userId = req.user.id;
+
+    const roadmapExists = roadmaps[career];
+    if (!roadmapExists) return res.status(400).json({ message: 'Invalid career selected' });
+
+    await User.findByIdAndUpdate(userId, { career });
+
+    res.json({ message: 'Career selected successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error saving career', error: error.message });
+  }
+};
+
+exports.getRoadmap = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user?.career) return res.status(404).json({ message: 'No career selected yet' });
+
+    const roadmap = roadmaps[user.career];
+    if (!roadmap) return res.status(404).json({ message: 'Roadmap not found' });
+
+    res.json({ career: user.career, roadmap });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching roadmap', error: error.message });
+  }
+};
