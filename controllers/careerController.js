@@ -65,3 +65,19 @@ exports.getRoadmap = async (req, res) => {
     res.status(500).json({ message: 'Error fetching roadmap', error: error.message });
   }
 };
+
+const courseList = require('../data/careerCourses');
+
+exports.getCourses = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user?.career) return res.status(400).json({ message: 'No career selected' });
+
+    const courses = courseList[user.career];
+    if (!courses) return res.status(404).json({ message: 'No courses available for this career yet' });
+
+    res.json({ career: user.career, courses });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch courses', error: error.message });
+  }
+};

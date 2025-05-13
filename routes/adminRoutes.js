@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/authMiddleware');
-const restrictToRole = require('../middleware/roleMiddleware');
 const adminController = require('../controllers/adminController');
+const { restrictToRole } = require('../middleware/roleMiddleware');
+
 
 // Example admin routes:
 router.get('/users', auth, restrictToRole('admin'), adminController.getAllUsers);

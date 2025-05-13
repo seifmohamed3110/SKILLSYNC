@@ -4,7 +4,8 @@ const multer = require('multer');
 const path = require('path');
 const resumeController = require('../controllers/resumeController');
 const auth = require('../middleware/authMiddleware');
-const restrictToRole = require('../middleware/roleMiddleware');
+const { restrictToRole } = require('../middleware/roleMiddleware');
+
 
 const upload = multer({ dest: 'uploads/' });
 
