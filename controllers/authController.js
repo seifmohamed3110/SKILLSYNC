@@ -31,3 +31,50 @@ exports.register = async (req, res) => {
   }
 };
 
+
+const admin = require('../config/firebase');
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+
+exports.firebaseLogin = async (req, res) => {
+  const { idToken } = req.body;
+
+  try {
+    // 1. Verify Firebase ID token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { uid, name, email } = decodedToken;
+
+    // 2. Check if user already exists in MongoDB
+    let user = await User.findOne({ email });
+    if (!user) {
+      // Create new user (default free subscription)
+      user = new User({
+        name: name || "Firebase User",
+        email,
+        password: 'firebase', // Dummy password
+        subscription: 'free',
+        role: 'student',
+      });
+      await user.save();
+    }
+
+    // 3. Issue JWT for backend auth
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: '2h'
+    });
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        subscription: user.subscription,
+      },
+    });
+  } catch (error) {
+    res.status(401).json({ message: 'Firebase login failed', error: error.message });
+  }
+};
+
