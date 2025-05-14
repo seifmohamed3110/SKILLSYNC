@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const assessmentController = require('../controllers/assessmentController');
-const authMiddleware = require('../middleware/authMiddleware');
+const { auth } = require('../middleware/authMiddleware');
 
-router.post('/submit', authMiddleware, assessmentController.submitAssessment);
-router.get('/history', authMiddleware, assessmentController.getAssessmentHistory);
+// Check that these are valid functions
+router.post('/submit', auth, assessmentController.submitAssessment);
+router.get('/history', auth, assessmentController.getAssessmentHistory);
 
 module.exports = router;

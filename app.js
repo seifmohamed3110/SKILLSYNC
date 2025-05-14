@@ -21,11 +21,10 @@ const adminRoutes = require('./routes/adminRoutes');
 const assessmentRoutes = require('./routes/assessmentRoutes');
 const careerRoutes = require('./routes/careerRoutes');
 const progressRoutes = require('./routes/progressRoutes');
-
-
 const chatRoutes = require('./routes/chatRoutes');
-app.use('/api/chat', chatRoutes);
 
+// Use routes
+app.use('/api/chat', chatRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/resume', resumeRoutes);
@@ -34,17 +33,15 @@ app.use('/api/assessment', assessmentRoutes);
 app.use('/api/career', careerRoutes);
 app.use('/api/progress', progressRoutes);
 
-
-
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
-  .then(() => console.log(' Connected to MongoDB'))
-  .catch(err => console.error(' MongoDB connection error:', err));
-
-module.exports = app;
+// Root route to test if server is working
 app.get('/', (req, res) => {
   res.send('SkillSync Backend API is working');
 });
 
-
+// Export app
+module.exports = app;

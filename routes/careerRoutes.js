@@ -1,12 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const careerController = require('../controllers/careerController');
-const authMiddleware = require('../middleware/authMiddleware');
+const { auth } = require('../middleware/authMiddleware'); // Corrected import
 
-router.get('/suggest', authMiddleware, careerController.suggestCareers);
-router.post('/select', authMiddleware, careerController.selectCareer);
-router.get('/roadmap', authMiddleware, careerController.getRoadmap);
-router.get('/courses', authMiddleware, careerController.getCourses);
+// Route to suggest careers
+router.get('/suggest', auth, careerController.suggestCareers);
 
+// Route to select a career
+router.post('/select', auth, careerController.selectCareer);
+
+// Route to get career roadmap
+router.get('/roadmap', auth, careerController.getRoadmap);
+
+// Route to get career-related courses
+router.get('/courses', auth, careerController.getCourses);
 
 module.exports = router;
