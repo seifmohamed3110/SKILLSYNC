@@ -22,6 +22,7 @@ const assessmentRoutes = require('./routes/assessmentRoutes');
 const careerRoutes = require('./routes/careerRoutes');
 const progressRoutes = require('./routes/progressRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const mentorRoutes = require('./routes/mentorRoutes');
 
 // Use routes
 app.use('/api/chat', chatRoutes);
@@ -32,6 +33,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/assessment', assessmentRoutes);
 app.use('/api/career', careerRoutes);
 app.use('/api/progress', progressRoutes);
+app.use('/api/mentor', mentorRoutes);
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)

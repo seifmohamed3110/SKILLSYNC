@@ -7,7 +7,9 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   subscription: { type: String, enum: ['free', 'premium'], default: 'free' },
   observer: [{ type: Schema.Types.ObjectId, ref: 'Observer' }],
-  career: { type: String }
+  career: { type: String },
+  resumeKeywords: [{ type: String }],
+
 
 }, {
   discriminatorKey: 'role', // student, mentor, admin

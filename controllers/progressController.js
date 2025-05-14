@@ -2,18 +2,19 @@ const Progress = require('../models/Progress');
 const roadmaps = require('../data/roadmaps');
 const User = require('../models/User');
 
+// ✅ Update progress (merge new steps with existing ones)
 exports.updateProgress = async (req, res) => {
   const userId = req.user.id;
   const { completedSteps } = req.body;
 
   try {
     let progress = await Progress.findOne({ user: userId });
+
     if (!progress) {
       progress = new Progress({ user: userId, completedSteps });
     } else {
-      // Merge with existing completed steps
       const allSteps = new Set([...progress.completedSteps, ...completedSteps]);
-      progress.completedSteps = [...allSteps];
+      progress.completedSteps = Array.from(allSteps);
       progress.updatedAt = Date.now();
     }
 
@@ -24,18 +25,19 @@ exports.updateProgress = async (req, res) => {
   }
 };
 
+// ✅ Get current progress & visual status
 exports.getProgress = async (req, res) => {
   const userId = req.user.id;
 
   try {
     const user = await User.findById(userId);
-    if (!user?.career) return res.status(400).json({ message: 'User has not selected a career yet' });
+    if (!user?.career) {
+      return res.status(400).json({ message: 'User has not selected a career yet' });
+    }
 
     const roadmap = roadmaps[user.career];
     const progress = await Progress.findOne({ user: userId });
-
     const completed = progress?.completedSteps || [];
-    const total = roadmap.length;
 
     const status = roadmap.map(step => ({
       step,
@@ -44,9 +46,9 @@ exports.getProgress = async (req, res) => {
 
     res.json({
       career: user.career,
-      totalSteps: total,
+      totalSteps: roadmap.length,
       completedSteps: completed.length,
-      progressPercentage: Math.round((completed.length / total) * 100),
+      progressPercentage: Math.round((completed.length / roadmap.length) * 100),
       status
     });
   } catch (error) {
