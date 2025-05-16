@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 // Load environment variables
 dotenv.config();
-
+app.use('/api/auth', require('./routes/authRoutes'));
 // Create express app
 const app = express();
 
