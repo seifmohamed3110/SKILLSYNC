@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 // Load environment variables
 dotenv.config();
-app.use('/api/auth', require('./routes/authRoutes'));
+
 // Create express app
 const app = express();
 
@@ -34,7 +34,7 @@ app.use('/api/assessment', assessmentRoutes);
 app.use('/api/career', careerRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/mentor', mentorRoutes);
-
+app.use('/api/auth', require('./routes/authRoutes'));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
