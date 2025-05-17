@@ -12,7 +12,6 @@ const upload = multer({ dest: 'uploads/' });
 router.post(
   '/upload',
   auth,
-  restrictToRole('student'),
   upload.single('resume'),
   resumeController.uploadAndAnalyze
 );
